@@ -45,6 +45,28 @@ dts2rs ./examples --outdir=dist-rs
     <code class="language-rust">v: Vec&lt;bool&gt;</code>
   </td>
 </tr>
+<tr>
+  <td>
+    <code class="language-typescript">
+export interface A{
+  a: number
+}
+<br>
+export interface B{
+  a: A
+}
+    </code>
+  </td>
+  <td>
+    <code class="language-rust">
+pub struct A;
+<br>
+pub struct B{
+  a: A
+};
+    </code>
+  </td>
+</tr>
 </table>
 
 ## todo
