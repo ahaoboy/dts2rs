@@ -4,5 +4,4 @@ export interface A {
   a3: boolean
 }
 
-
-export type K = 'a' | 'b'
+export type K = "a" | "b"
