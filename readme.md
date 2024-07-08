@@ -7,7 +7,11 @@ dts2rs ./examples --outdir=dist-rs
 ```
 
 ## rules
-
+<style>
+    table {
+        width: 100%;
+    }
+</style>
 <table style="width: 100%;">
 <tr style="width: 100%;">
   <th style="width: 50%;">dts</th>
