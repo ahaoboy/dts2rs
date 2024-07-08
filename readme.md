@@ -7,11 +7,7 @@ dts2rs ./examples --outdir=dist-rs
 ```
 
 ## rules
-<style>
-    table {
-        width: 100%;
-    }
-</style>
+
 <table style="width: 100%;">
 <tr style="width: 100%;">
   <th style="width: 50%;">dts</th>
@@ -31,42 +27,45 @@ v: String
 </tr>
 <tr>
   <td>
-    <code class="language-typescript">v: number</code>
+    <pre lang="typescript">v: number</pre>
   </td>
   <td>
-    <code class="language-rust">v: f32</code>
-  </td>
-</tr>
-<tr>
-  <td>
-    <code class="language-typescript">v?: number | null</code>
-  </td>
-  <td>
-    <code class="language-rust">v: Option&lt;f32&gt;</code>
+    <pre lang="rust">v: f32</pre>
   </td>
 </tr>
 <tr>
   <td>
-    <code class="language-typescript">v: boolean[]</code>
+    <pre lang="typescript">v?: number | null</pre>
   </td>
   <td>
-    <code class="language-rust">v: Vec&lt;bool&gt;</code>
+    <pre lang="rust">v: Option&lt;f32&gt;</pre>
   </td>
 </tr>
 <tr>
   <td>
-    <code class="language-typescript">export interface A{
+    <pre lang="typescript">v: boolean[]</pre>
+  </td>
+  <td>
+    <pre lang="rust">v: Vec&lt;bool&gt;</pre>
+  </td>
+</tr>
+<tr>
+  <td>
+    <pre lang="typescript">
+export interface A{
   a: number
 }
 export interface B{
   a: A
-}</code>
+}</pre>
   </td>
   <td>
-    <code class="language-rust">pub struct A;
+    <pre lang="rust">
+pub struct A;
+
 pub struct B{
   a: A
-};</code>
+};</pre>
   </td>
 </tr>
 </table>
