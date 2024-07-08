@@ -15,10 +15,14 @@ dts2rs ./examples --outdir=dist-rs
 </tr>
 <tr>
   <td>
-    <code class="language-typescript">v: string</code>
+<pre lang="typescript">
+v: string
+</pre>
   </td>
   <td>
-    <code class="language-rust">v: String</code>
+<pre lang="rust">
+v: String
+</pre>
   </td>
 </tr>
 <tr>
