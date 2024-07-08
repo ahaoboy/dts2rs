@@ -1,0 +1,40 @@
+{
+  "name": "dts2rs",
+  "version": "0.1.0",
+  "description": "convert typescript to rust",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.js",
+  "files": [
+    "dist",
+    "cli",
+    "bin"
+  ],
+  "bin": {
+    "dts2rs": "./bin/index.js"
+  },
+  "scripts": {
+    "dev": "tsc -w",
+    "build": "tsc && npm run build:cli",
+    "build:cli": "esbuild --bundle ./src/cli.ts --outdir=./cli --platform=node",
+    "lint": "biome check --apply-unsafe  ./",
+    "format": "biome format --write  ./",
+    "lint:fix": "biome lint ./ --write --unsafe",
+    "clear": "rm -rf node_modules dist",
+    "release": "pnpm publish --access public",
+    "release-alpha": "pnpm publish -access public --tag alpha"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cac": "^6.7.14",
+    "@biomejs/biome": "^1.8.3",
+    "@types/node": "^20.14.10",
+    "esbuild": "^0.23.0"
+  },
+  "dependencies": {
+    "change-case-all": "^2.1.0",
+    "ts-morph": "^23.0.0",
+    "typescript": "^5.5.3"
+  }
+}
