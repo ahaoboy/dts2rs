@@ -47,24 +47,18 @@ dts2rs ./examples --outdir=dist-rs
 </tr>
 <tr>
   <td>
-    <code class="language-typescript">
-export interface A{
+    <code class="language-typescript">export interface A{
   a: number
 }
-<br>
 export interface B{
   a: A
-}
-    </code>
+}</code>
   </td>
   <td>
-    <code class="language-rust">
-pub struct A;
-<br>
+    <code class="language-rust">pub struct A;
 pub struct B{
   a: A
-};
-    </code>
+};</code>
   </td>
 </tr>
 </table>
