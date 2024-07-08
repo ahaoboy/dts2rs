@@ -8,18 +8,18 @@ dts2rs ./examples --outdir=dist-rs
 
 ## rules
 
-<table>
-<tr>
-  <th>dts</th>
-  <th>rust</th>
+<table style="width: 100%;">
+<tr style="width: 100%;">
+  <th style="width: 50%;">dts</th>
+  <th style="width: 50%;">rust</th>
 </tr>
-<tr>
-  <td>
+<tr style="width: 100%;">
+  <td style="width: 50%;">
 <pre lang="typescript">
 v: string
 </pre>
   </td>
-  <td>
+  <td style="width: 50%;">
 <pre lang="rust">
 v: String
 </pre>
