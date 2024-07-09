@@ -1,15 +1,16 @@
 import fs from "node:fs"
 import path from "node:path"
 import { parseTsFile } from "./parse"
-import type { Field, File, Struct } from "./struct"
+import { LiteralUnion, type Field, type File, type Struct } from "./struct"
 import { Case } from "change-case-all"
 import { ReservedKeywords, StrictKeywords } from "rs-keywords"
+import { parse, init } from 'es-module-lexer';
+import { graphSequencer } from '@pnpm/deps.graph-sequencer'
 export type Config = {
   derive: string[]
   outdir: string
   convertType?: (field: Field) => string | undefined
 }
-
 export const BuiltInStruct: Record<string, string> = {
   number: "f32",
   string: "String",
@@ -44,6 +45,14 @@ function toRust(
   const structList: string[] = []
 
   for (const st of file.structs) {
+    if (st instanceof LiteralUnion) {
+      for (const s of st.literalList) {
+        const literName = Case.constant(s)
+        const literValue = s
+        structList.push(`pub const ${literName}: &str = "${literValue}";`)
+      }
+    }
+
     if (st.builtinName) {
       structList.push(`pub type ${st.name} = ${BuiltInStruct[st.builtinName]};`)
       continue
@@ -165,16 +174,81 @@ ${structList.join("\n")}
   fs.writeFileSync(outPath, code)
 }
 
-export function build(fileOrDir: string, config: Config) {
+function resolveTsMod(dir: string, mod: string) {
+  const tsPath = path.resolve(path.join(dir, `${mod}.ts`));
+
+  if (fs.existsSync(tsPath)) {
+    return tsPath
+  }
+
+  const dtsPath = path.resolve(path.join(dir, `${mod}.d.ts`));
+  if (fs.existsSync(dtsPath)) {
+    return dtsPath
+  }
+  return
+}
+
+async function typoSort(list: string[]): Promise<string[]> {
+  await init;
+  const nodes: Record<string, number> = {}
+  const nodeNameMap: Record<number, string> = {}
+  let nodeId = 0;
+  const graph = new Map<number, number[]>()
+
+  for (const i of list) {
+
+    if (typeof nodes[i] === 'undefined') {
+      graph.set(nodeId, [])
+      nodes[i] = nodeId
+      nodeNameMap[nodeId] = i
+      nodeId++
+    }
+    const fromId = nodes[i]
+
+    const source = fs.readFileSync(i, 'utf8');
+    const [imports,] = parse(source);
+
+    const dir = path.dirname(i)
+    for (const dep of imports) {
+      if (!dep.n) {
+        continue
+      }
+      const depPath = resolveTsMod(dir, dep.n)
+      if (!depPath) {
+        continue
+      }
+      if (typeof nodes[depPath] === 'undefined') {
+        nodes[depPath] = nodeId
+        nodeNameMap[nodeId] = depPath
+        graph.set(nodeId, [])
+        nodeId++
+      }
+      const toId = nodes[depPath]
+      const edge = graph.get(fromId) || [];
+      edge.push(toId)
+      graph.set(fromId, edge)
+    }
+  }
+
+  const sorted = graphSequencer(graph)
+  const s = sorted.chunks.flat().map(i => nodeNameMap[i])
+  return s
+}
+
+export async function build(fileOrDir: string, config: Config) {
   const { outdir } = config
   const isDir = fs.lstatSync(fileOrDir).isDirectory()
   const list = isDir
     ? fs.readdirSync(fileOrDir).map((i) => path.join(fileOrDir, i))
     : [fileOrDir]
-  const files = list.map(parseTsFile)
+
+  const absolutePathList = list.map(i => path.resolve(i))
+  const sortedList = await typoSort(absolutePathList)
+  const files = sortedList.map(parseTsFile)
   if (!fs.existsSync(outdir)) {
     fs.mkdirSync(outdir)
   }
+
   for (const file of files) {
     toRust(file, files, config)
   }

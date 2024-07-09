@@ -6,7 +6,7 @@ export class Field {
     public key: string,
     public structId: string,
     public optional = true,
-  ) {}
+  ) { }
 }
 
 export class Struct {
@@ -16,20 +16,29 @@ export class Struct {
     public file: File,
     public builtinName: string | undefined = undefined,
     public fields: Field[] = [],
-  ) {}
+  ) { }
+}
+
+
+export class LiteralUnion extends Struct {
+  public literalList: string[] = []
+}
+
+export class BuiltinStruct extends Struct {
+
 }
 
 export class Export {
   constructor(
     public id: string,
     public file: File,
-  ) {}
+  ) { }
 }
 export class Import {
   constructor(
     public id: string,
     public file: File,
-  ) {}
+  ) { }
 }
 
 export class File {
@@ -38,7 +47,7 @@ export class File {
     public structs: Struct[] = [],
     public imports: Import[] = [],
     public exports: Export[] = [],
-  ) {}
+  ) { }
 
   static fromPath(path: string): File {
     // const file = new File(path)

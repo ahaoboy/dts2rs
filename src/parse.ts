@@ -1,6 +1,7 @@
 import { Project, ts, TypeFlags } from "ts-morph"
-import { Export, Field, File, Struct } from "./struct"
+import { Export, Field, File, LiteralUnion, Struct } from "./struct"
 
+const hasExport = new Set<string>()
 export function parseTsFile(filePath: string): File {
   const project = new Project({})
 
@@ -16,12 +17,12 @@ export function parseTsFile(filePath: string): File {
 
   sourceFile.getExportedDeclarations().forEach((declarations, name) => {
     for (const declaration of declarations) {
+      const structId = declaration.getType().getText()
       if (ts.isInterfaceDeclaration(declaration.compilerNode)) {
         const interfaceDeclaration = declaration.asKindOrThrow(
           ts.SyntaxKind.InterfaceDeclaration,
         )
 
-        const structId = declaration.getType().getText()
         const fileName = declaration.getSourceFile().getBaseName()
 
         if (file.exports.find((i) => i.id === fileName)) {
@@ -36,7 +37,8 @@ export function parseTsFile(filePath: string): File {
           let isOptional = false
           if (
             member.getText().includes("?:") ||
-            member.getText().includes("null")
+            member.getText().includes("null") ||
+            member.getText().includes("undefined")
           ) {
             isOptional = true
           }
@@ -56,12 +58,18 @@ export function parseTsFile(filePath: string): File {
 
       if (ts.isTypeAliasDeclaration(declaration.compilerNode)) {
         if (declaration.getType().compilerType.flags === TypeFlags.Union) {
-          const structId = declaration.getType().getText()
-          const struct = new Struct(structId, name, file, "string")
+          if (hasExport.has(structId)) {
+            continue
+          }
+          const struct = new LiteralUnion(structId, name, file, "string")
           file.structs.push(struct)
-        }
+          hasExport.add(structId)
 
-        //
+          const list = declaration.getType().getUnionTypes().map(i => i.getLiteralValue()?.toString()).filter(i => i !== undefined)
+          if (list.length) {
+            struct.literalList = list
+          }
+        }
       }
     }
   })

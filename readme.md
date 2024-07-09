@@ -67,6 +67,8 @@ pub struct A{
 }
 ```
 
+## Who's Using dts2rs?
+- [serde-jellyfin](https://github.com/ahaoboy/serde-jellyfin)
 
 ## todo
 

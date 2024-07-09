@@ -4,7 +4,11 @@
   "description": "convert typescript to rust",
   "main": "./dist/index.js",
   "types": "./dist/index.d.js",
-  "files": ["dist", "cli", "bin"],
+  "files": [
+    "dist",
+    "cli",
+    "bin"
+  ],
   "bin": {
     "dts2rs": "./bin/index.js"
   },
@@ -29,7 +33,9 @@
     "esbuild": "^0.23.0"
   },
   "dependencies": {
+    "@pnpm/deps.graph-sequencer": "^2.0.1",
     "change-case-all": "^2.1.0",
+    "es-module-lexer": "^1.5.4",
     "rs-keywords": "^0.1.1",
     "ts-morph": "^23.0.0",
     "typescript": "^5.5.3"
