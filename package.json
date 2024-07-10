@@ -4,11 +4,7 @@
   "description": "convert typescript to rust",
   "main": "./dist/index.js",
   "types": "./dist/index.d.js",
-  "files": [
-    "dist",
-    "cli",
-    "bin"
-  ],
+  "files": ["dist", "cli", "bin"],
   "bin": {
     "dts2rs": "./bin/index.js"
   },

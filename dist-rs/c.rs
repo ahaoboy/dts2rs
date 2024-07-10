@@ -1,15 +1,6 @@
-use crate::a::A;
-use crate::b::B;
-
-
-
-
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize, )]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, serde::Serialize, serde::Deserialize)]
 pub struct C{
-
-  pub a: A,
-  #[serde(rename = "B")]
-  pub b: B,
-
-  pub r#box: Box<C>,
+pub a: A;
+pub B: B;
+pub box: C;
 }

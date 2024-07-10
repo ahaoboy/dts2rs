@@ -1,16 +1,12 @@
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize, )]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, serde::Serialize, serde::Deserialize)]
 pub struct JSONTypeSource{
-
-  pub kind: undefined,
+pub kind: string;
 }
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize, )]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, serde::Serialize, serde::Deserialize)]
 pub struct SchemaTypeSource{
-
-  pub kind: undefined,
+pub kind: string;
 }
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize, )]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, serde::Serialize, serde::Deserialize)]
 pub struct GraphQLTypeSource{
-
-  pub kind: undefined,
+pub kind: string;
 }
-pub type TypeSource = String;

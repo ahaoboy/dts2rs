@@ -1,4 +1,4 @@
-import type { A } from "./a"
+import type { A } from "./base"
 import type { B } from "./b"
 
 export interface C {
